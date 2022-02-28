@@ -7,7 +7,8 @@ import 'src/routes.dart';
 final Router router = ApiRouter(routes);
 
 void main(List<String> arguments) async {
-  final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4040);
+  final server = await HttpServer.bind(InternetAddress.anyIPv4, 8080);
+
   await for (final request in server) {
     await router.route(request);
     await request.response.close();
