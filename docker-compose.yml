@@ -5,6 +5,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
   
   db:
     image: postgres:latest
@@ -17,6 +19,7 @@ services:
       POSTGRES_PASSWORD: listry
     volumes:
       - database:/var/lib/postgresql/data:rw
+      - ./database.sql:/docker-entrypoint-initdb.d/db.sql:ro
 
 volumes:
   database:
