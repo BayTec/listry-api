@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+  
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: listry
+      POSTGRES_USER: listry
+      POSTGRES_PASSWORD: listry
+    volumes:
+      - database:/var/lib/postgresql/data:rw
+
+volumes:
+  database:
