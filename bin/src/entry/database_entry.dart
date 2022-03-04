@@ -56,11 +56,14 @@ class DatabaseEntry implements Entry {
 
   @override
   Future<Map<String, dynamic>> toMap() async {
+    final entry = await database.query(
+        'SELECT name, amount, checked FROM listy.entry WHERE id = ${id()};');
+
     return {
       'id': id(),
-      'name': await getName(),
-      'amount': await getAmount(),
-      'checked': await getChecked(),
+      'name': entry.first['name'],
+      'amount': entry.first['amount'],
+      'checked': entry.first['checked'],
     };
   }
 }
