@@ -6,3 +6,4 @@
 build/
 .devcontainer/devcontainer.json
 docker-compose.yml
+.vscode/launch.json
