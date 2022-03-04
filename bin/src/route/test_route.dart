@@ -17,11 +17,11 @@ class TestRoute implements Route {
   @override
   Future<void> handleRequest(HttpRequest request) async {
     final database = PostgresDatabase(
-      'db',
-      5432,
-      'listry',
-      'listry',
-      'listry',
+      Platform.environment['DATABASE_HOST'] ?? '',
+      int.tryParse(Platform.environment['DATABASE_PORT'] ?? '0') ?? 0,
+      Platform.environment['DATABASE_NAME'] ?? '',
+      Platform.environment['DATABASE_USERNAME'] ?? '',
+      Platform.environment['DATABASE_PASSWORD'] ?? '',
     );
 
     final listyStore = DatabaseListyStore(database);
