@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS listy.entry (
     id integer PRIMARY KEY,
     name varchar(255),
     amount integer,
-    checked boolean
+    checked boolean,
+    listy_id integer
 );

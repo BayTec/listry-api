@@ -12,7 +12,7 @@ class DatabaseListyStore implements ListyStore {
   Future<List<Listy>> all() async {
     final List<Listy> listies = [];
 
-    final ids = await database.query('SELECT id FROM listy;');
+    final ids = await database.query('SELECT id FROM listy.listy;');
 
     for (final element in ids) {
       listies.add(DatabaseListy(element['id'], database));
@@ -23,7 +23,7 @@ class DatabaseListyStore implements ListyStore {
 
   @override
   Future<Listy> create(String name) async {
-    final ids = await database.query('SELECT id FROM listy;');
+    final ids = await database.query('SELECT id FROM listy.listy;');
 
     var id = 0;
     while (ids.any((element) => element['id'] == id)) {
@@ -31,19 +31,21 @@ class DatabaseListyStore implements ListyStore {
     }
 
     await database.execute(
-        'INSERT INTO listy (id, name) VALUES ($id, @name);', {'name': name});
+        'INSERT INTO listy.listy (id, name) VALUES ($id, @name);',
+        {'name': name});
 
     return DatabaseListy(id, database);
   }
 
   @override
   Future<void> delete(Listy listy) async {
-    await database.execute('DELETE FROM listy WHERE id = ${listy.id()};');
+    await database.execute('DELETE FROM listy.listy WHERE id = ${listy.id()};');
   }
 
   @override
   Future<Listy?> find(int id) async {
-    final ids = await database.query('SELECT id FROM listy WHERE id = $id;');
+    final ids =
+        await database.query('SELECT id FROM listy.listy WHERE id = $id;');
 
     if (ids.isEmpty) {
       return null;

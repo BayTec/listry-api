@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:postgres/postgres.dart';
-
 import '../database/postgres_database.dart';
 import '../http_method.dart';
 import '../listy_store/database_listy_store.dart';
@@ -19,26 +17,20 @@ class TestRoute implements Route {
   @override
   Future<void> handleRequest(HttpRequest request) async {
     final database = PostgresDatabase(
-      PostgreSQLConnection(
-        'db',
-        5432,
-        'listry',
-        username: 'listry',
-        password: 'listry',
-      ),
+      'db',
+      5432,
+      'listry',
+      'listry',
+      'listry',
     );
 
     final listyStore = DatabaseListyStore(database);
 
-    await listyStore.create('firsty');
+    final thirdy = await listyStore.create('thirdy');
 
     request.response.statusCode = HttpStatus.ok;
     request.response.write(
-      jsonEncode(
-        await database.query('''
-          SELECT * FROM listy.listy;
-        '''),
-      ),
+      jsonEncode(await thirdy.toMap()),
     );
   }
 

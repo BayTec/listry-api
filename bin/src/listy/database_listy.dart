@@ -11,7 +11,7 @@ class DatabaseListy implements Listy {
 
   @override
   Future<Entry> createEntry(String name, int amount, bool checked) async {
-    final ids = await database.query('SELECT id FROM entry;');
+    final ids = await database.query('SELECT id FROM listy.entry;');
 
     var id = 0;
     while (ids.any((element) => element['id'] == id)) {
@@ -19,7 +19,7 @@ class DatabaseListy implements Listy {
     }
 
     await database.execute(
-        'INSERT INTO entry (id, name, amount, checked, listy_id) VALUES ($id, @name, $amount, $checked, ${this.id()});',
+        'INSERT INTO listy.entry (id, name, amount, checked, listy_id) VALUES ($id, @name, $amount, $checked, ${this.id()});',
         {'name': name});
 
     return DatabaseEntry(id, database);
@@ -29,8 +29,8 @@ class DatabaseListy implements Listy {
   Future<List<Entry>> getEntries() async {
     final List<Entry> entries = [];
 
-    final ids =
-        await database.query('SELECT id FROM entry WHERE listy_id = ${id()};');
+    final ids = await database
+        .query('SELECT id FROM listy.entry WHERE listy_id = ${id()};');
 
     for (final element in ids) {
       entries.add(DatabaseEntry(element['id'], database));
@@ -41,8 +41,8 @@ class DatabaseListy implements Listy {
 
   @override
   Future<String> getName() async {
-    final names =
-        await database.query('SELECT name FROM listy WHERE id = ${id()};');
+    final names = await database
+        .query('SELECT name FROM listy.listy WHERE id = ${id()};');
 
     return names.first['name'];
   }
@@ -54,12 +54,30 @@ class DatabaseListy implements Listy {
 
   @override
   Future<void> deleteEntry(Entry entry) async {
-    await database.execute('DELETE FROM entry WHERE id = ${entry.id()};');
+    await database.execute('DELETE FROM listy.entry WHERE id = ${entry.id()};');
   }
 
   @override
   Future<void> setName(String name) async {
     await database.execute(
-        'UPDATE listy SET name = @name WHERE id = ${id()};', {'name': name});
+        'UPDATE listy.listy SET name = @name WHERE id = ${id()};',
+        {'name': name});
+  }
+
+  @override
+  Future<Map<String, dynamic>> toMap() async {
+    final entries = await getEntries();
+
+    final List<Map<String, dynamic>> mappedEntries = [];
+
+    for (final element in entries) {
+      mappedEntries.add(await element.toMap());
+    }
+
+    return {
+      'id': id(),
+      'name': await getName(),
+      'entries': mappedEntries,
+    };
   }
 }

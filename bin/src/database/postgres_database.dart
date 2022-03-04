@@ -3,12 +3,28 @@ import 'package:postgres/postgres.dart';
 import 'database.dart';
 
 class PostgresDatabase implements Database {
-  final PostgreSQLConnection connection;
+  final String host;
+  final int port;
+  final String databaseName;
+  final String username, password;
 
-  PostgresDatabase(this.connection);
+  PostgresDatabase(
+      this.host, this.port, this.databaseName, this.username, this.password);
+
+  PostgreSQLConnection connection() {
+    return PostgreSQLConnection(
+      host,
+      port,
+      databaseName,
+      username: username,
+      password: password,
+    );
+  }
 
   @override
   Future<void> execute(String sql, [Map<String, dynamic>? parameter]) async {
+    final connection = this.connection();
+
     await connection.open();
     await connection.execute(sql, substitutionValues: parameter);
     await connection.close();
@@ -17,13 +33,18 @@ class PostgresDatabase implements Database {
   @override
   Future<List<Map<String, dynamic>>> query(String sql,
       [Map<String, dynamic>? parameter]) async {
+    final List<Map<String, dynamic>> list = [];
+
+    final connection = this.connection();
+
     await connection.open();
-
-    final result =
-        await connection.mappedResultsQuery(sql, substitutionValues: parameter);
-
+    final result = await connection.query(sql, substitutionValues: parameter);
     await connection.close();
 
-    return result; // TODO: find out how to correctliy get the data
+    for (final row in result) {
+      list.add(row.toColumnMap());
+    }
+
+    return list;
   }
 }

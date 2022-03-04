@@ -7,4 +7,5 @@ abstract class Listy {
   Future<List<Entry>> getEntries();
   Future<Entry> createEntry(String name, int amount, bool checked);
   Future<void> deleteEntry(Entry entry);
+  Future<Map<String, dynamic>> toMap();
 }

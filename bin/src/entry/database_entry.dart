@@ -53,4 +53,14 @@ class DatabaseEntry implements Entry {
     await database.execute(
         'UPDATE entry SET name = @name WHERE id = ${id()};', {'name': name});
   }
+
+  @override
+  Future<Map<String, dynamic>> toMap() async {
+    return {
+      'id': id(),
+      'name': await getName(),
+      'amount': await getAmount(),
+      'checked': await getChecked(),
+    };
+  }
 }
