@@ -4,7 +4,7 @@ import '../http_method.dart';
 import 'route.dart';
 
 class NotFoundRoute implements Route {
-  final String _path;
+  final Uri _path;
 
   NotFoundRoute(this._path);
 
@@ -15,12 +15,8 @@ class NotFoundRoute implements Route {
   }
 
   @override
-  HttpMethod method() {
-    return HttpMethod.get;
-  }
+  HttpMethod method() => HttpMethod.get;
 
   @override
-  String path() {
-    return _path;
-  }
+  Uri path() => _path;
 }

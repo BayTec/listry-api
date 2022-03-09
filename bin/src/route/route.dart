@@ -3,7 +3,7 @@ import 'dart:io';
 import '../http_method.dart';
 
 abstract class Route {
-  String path();
+  Uri path();
   HttpMethod method();
   Future<void> handleRequest(HttpRequest request);
 }

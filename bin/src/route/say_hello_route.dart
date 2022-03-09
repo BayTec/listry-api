@@ -4,11 +4,11 @@ import '../http_method.dart';
 import 'route.dart';
 
 class SayHelloRoute implements Route {
-  final String _path;
+  final Uri _path;
   final HttpMethod _method;
 
   SayHelloRoute()
-      : _path = '/say-hello',
+      : _path = Uri(pathSegments: ['say-hello']),
         _method = HttpMethod.get;
 
   @override
@@ -21,5 +21,5 @@ class SayHelloRoute implements Route {
   HttpMethod method() => _method;
 
   @override
-  String path() => _path;
+  Uri path() => _path;
 }
