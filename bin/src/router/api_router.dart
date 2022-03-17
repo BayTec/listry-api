@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../http_method.dart';
 import '../route/not_found_route.dart';
 import '../route/route.dart';
 import 'router.dart';
@@ -12,7 +13,11 @@ class ApiRouter implements Router {
   @override
   Future<void> route(HttpRequest request) async {
     final requestPath = request.uri.pathSegments;
+
     var routes = this.routes().where(
+        (element) => element.method() == methodFromString(request.method));
+
+    routes = routes.where(
         (element) => element.path().pathSegments.length == requestPath.length);
 
     for (int i = 0; i < requestPath.length; i++) {

@@ -28,7 +28,7 @@ class GetListyRoute implements Route {
       request.response.write(jsonEncode(await listy.toMap()));
     } else {
       request.response.statusCode = HttpStatus.badRequest;
-      request.response.write('The listy with the id: $id was not found.');
+      request.response.write('The listy with the id $id was not found.');
     }
   }
 
